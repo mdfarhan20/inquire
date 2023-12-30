@@ -3,9 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
 import { signIn, signOut } from "next-auth/react";
-import GoogleIcon from "@/public/google-icon.svg";
+import { FaGoogle as GoogleIcon } from "react-icons/fa";
 
-export function GithubLoginButton() {
+export function GithubLoginButton({ text }: {text: string}) {
   const loginWithGithub = () => {
     signIn("github", {
       callbackUrl: window.location.origin
@@ -18,12 +18,17 @@ export function GithubLoginButton() {
       className="w-full border-1 border-primary"
       onClick={loginWithGithub}
     >
-      <Github className="mr-4" /> Login with Github
+      <Github className="mr-4" /> {text}
     </Button>
   )
 }
 
-export function GoogleLoginButton() {
+GithubLoginButton.defaultProps = {
+  text: "Login with Github"
+}
+
+
+export function GoogleLoginButton({ text }: { text: string }) {
   const loginWithGoogle = () => {
     signIn("google", { callbackUrl: window.location.origin });
   }
@@ -34,16 +39,20 @@ export function GoogleLoginButton() {
       className="w-full border-1 border-primary"
       onClick={loginWithGoogle}
     >
-      <GoogleIcon className="mr-4" /> Login with Github
+      <GoogleIcon size="1.2rem" className="mr-4" /> {text}
     </Button>
   )
+}
+
+GoogleLoginButton.defaultProps = {
+  text: "Login with Google"
 }
 
 export function LogoutButton() {
   return (
     <Button 
-      onClick={() => signOut({ callbackUrl: `${window.location.origin}/login` })}
-      className="w-fit"
+      onClick={() => signOut({ callbackUrl: `${window.location.origin}/auth/login` })}
+      className="rounded-none"
     >
       Logout
     </Button>

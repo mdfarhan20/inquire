@@ -1,14 +1,16 @@
-import LoginForm from "@/components/login/login-form";
+import LoginForm from "@/components/auth/login-form";
 import { 
   Card,
   CardContent, 
+  CardFooter, 
   CardHeader,
   CardTitle 
 } from "@/components/ui/card";
-import { GithubLoginButton, GoogleLoginButton } from "@/components/oauth-login";
+import { GithubLoginButton, GoogleLoginButton } from "@/components/auth-buttons";
 import { DividerWithText } from "@/components/ui/divider";
 import { getSession } from "@/lib/get-session";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 
 export default async function LoginPage() {
@@ -30,6 +32,11 @@ export default async function LoginPage() {
           <GithubLoginButton />
           <GoogleLoginButton />
         </CardContent>
+        <CardFooter>
+          <p className="w-full text-center text-sm">
+            Don't have an account ? <Link className="text-blue-200 ml-1 underline" href="/auth/register">Register</Link>
+          </p>
+        </CardFooter>
       </Card>
     </main>
   )

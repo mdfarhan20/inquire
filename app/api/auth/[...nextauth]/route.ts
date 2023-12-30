@@ -6,6 +6,8 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+import { compare } from "bcrypt";
+
 export const authOptions = {
     providers: [
         CredentialsProvider({
@@ -15,6 +17,17 @@ export const authOptions = {
                 password: { label: "password", type: "password" }
             },
             async authorize(credentials) {
+                if (!credentials?.email || !credentials.password)
+                    return null;
+                    
+                const user = await prisma.user.findUnique({ where: {
+                    email: credentials.email
+                }});
+
+                if (user && await compare(credentials.password, user.password)) {
+                    return user;
+                }
+
                 return null;
             }
         }),
@@ -28,6 +41,9 @@ export const authOptions = {
         })
     ],
     adapter: PrismaAdapter(prisma),
+    session: {
+        strategy: "jwt"
+    },
     secret: process.env.NEXTAUTH_SECRET,
     debug: process.env.NODE_ENV === "development"
 } satisfies NextAuthOptions;

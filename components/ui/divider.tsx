@@ -1,7 +1,7 @@
 
 export function Divider() {
   return (
-    <hr />
+    <hr className="w-full" />
   );
 }
 
