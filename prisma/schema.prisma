@@ -46,6 +46,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  forms         Form[]
 }
 
 model VerificationToken {
@@ -54,4 +55,39 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Form {
+  id            String    @id @default(cuid())
+  title         String
+  description   String?
+  userId        String
+  formFields    FormField[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model FormField {
+  id        String          @id @default(cuid())
+  question  String
+  type      FormFieldType   @default(SHORT_ANSWER)
+  formId    String
+  options   FormFieldOption[]
+
+  form Form @relation(fields: [formId], references: [id], onDelete: Cascade)
+}
+
+model FormFieldOption {
+  id          String    @id @default(cuid())
+  text        String
+  formFieldId String
+
+  formField FormField @relation(fields: [formFieldId], references: [id], onDelete: Cascade)
+}
+
+enum FormFieldType {
+  MCQ
+  CHECKBOX
+  SHORT_ANSWER
+  LONG_ANSWER
 }

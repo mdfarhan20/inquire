@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle 
 } from "@/components/ui/card";
-import { GithubLoginButton, GoogleLoginButton } from "@/components/auth-buttons";
+import { GithubLoginButton, GoogleLoginButton } from "@/components/auth/auth-buttons";
 import { DividerWithText } from "@/components/ui/divider";
 import { getSession } from "@/lib/get-session";
 import { redirect } from "next/navigation";

@@ -8,7 +8,7 @@ import {
   CardTitle
 } from "@/components/ui/card";
 import Link from "next/link";
-import { LogoutButton } from "@/components/auth-buttons";
+import { LogoutButton } from "@/components/auth/auth-buttons";
 import { redirect } from "next/navigation";
 import { Divider } from "@/components/ui/divider";
 

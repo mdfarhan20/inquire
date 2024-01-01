@@ -59,3 +59,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.m-all-0 {
+  margin: 0 !important;
+}
