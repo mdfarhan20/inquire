@@ -19,7 +19,7 @@ import {
 import { GrTextAlignFull as LongTextIcon } from "react-icons/gr";
 import { IoIosCheckboxOutline as CheckboxIcon, IoMdClose as CloseIcon } from "react-icons/io";
 import { Switch } from "../ui/switch";
-import {  ReactElement,  useState } from "react";
+import {  ChangeEvent, ReactElement,  useMemo,  useState } from "react";
 import { FormInput } from "@/components/form/form-input";
 
 export function FormField() {
@@ -93,29 +93,33 @@ function TextAnswerPreview({ text }: { text: string }) {
   );
 }
 
+type ChoiceType = {
+  name: string,
+  value: string
+}
+
 function ChoicePreview() {
-  const [options, setOptions] = useState([{
-    name: "option-1", defaultValue: "Option 1"
-  }]);
+  const [options, setOptions] = useState<ChoiceType[]>([{ name: "option-1", value: "Option 1" }]);
+  const optionCount = useMemo(() => options.length, [options]);
 
   const addOption = () => {
-    const index = options.length + 1;
-    const newOption = {
-      name: `option-${index}`,
-      defaultValue: `Option ${index}`,
-    };
-
-    setOptions(prev => [...prev, newOption] );
+    if (optionCount >= 5) return;
+    const option: ChoiceType = { name: `option-${optionCount + 1}`, value: `Option ${optionCount + 1}` };
+    setOptions(prev => [...prev, option]);
   }
 
   const removeOption = (index: number) => {
-    const updatedOptions = [...options.slice(0, index), ...options.slice(index + 1)];
-    console.log(updatedOptions);
+    if (optionCount <= 1) return;
+    const updatedOptions = [ ...options.slice(0, index), ...options.slice(index + 1) ];
     setOptions(updatedOptions);
   }
 
-  console.log("Options:", options);
-
+  const handleInputChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
+    const updatedOptions = options;
+    updatedOptions[index].value = e.target.value;
+    setOptions(updatedOptions);
+  }
+ 
   return (
     <div className="grid gap-4">
       { options.map((option, index) => (
@@ -123,8 +127,9 @@ function ChoicePreview() {
           <RadioButtonUncheckedIcon className="mt-0.5 fill-zinc-400" />
           <FormInput
             name={option.name}
-            defaultValue={option.defaultValue}
-            className="text-sm pb-1 w-full"
+            value={option.value}
+            className="text-sm pb-1  w-full"
+            onChange={(e) => handleInputChange(index, e)}
           />
           <Button onClick={() => removeOption(index)} variant="ghost" className="h-fit p-px">
             <CloseIcon size="1.2rem" />

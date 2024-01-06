@@ -11,17 +11,19 @@ export default async function NavBar() {
     <nav className="flex justify-between items-center px-8 py-2 border-b-2 border-border">
       <div className="flex items-center gap-2 font-semibold">
         <Icon size="1.2rem" />
-        <h1 className="text-xl">inquire</h1>
+        <h1 className="text-xl">
+          <Link href="/">inquire</Link>
+        </h1>
       </div>
 
       <div className="text-sm flex items-center gap-4">
         { !session ? (
           <>
-            <Link href="/auht/login" className="hover:text-gray-300 duration-100 transition-colors">
+            <Link href="/auth/login" className="hover:text-gray-300 duration-100 transition-colors">
               Login
             </Link>
             <Button variant="outline" className="px-4 py-0 border-gray-300">
-              <Link href="/auht/Register">Register</Link>
+              <Link href="/auth/Register">Register</Link>
             </Button>
           </>
         ) : (

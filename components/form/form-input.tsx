@@ -1,21 +1,16 @@
-import { title } from "process"
-
-interface FormInputProps {
-  name: string,
-  placeholder?: string,
-  required?: boolean,
-  defaultValue?: string,
-  className?: string
-}
+import { InputHTMLAttributes } from "react";
 
 export function FormInput(
   { 
     name,
-    placeholder="",
+    placeholder,
     required=false,
-    className="",
-    defaultValue=""
-  } : FormInputProps
+    className,
+    defaultValue,
+    value,
+    onClick,
+    onChange,
+  } : InputHTMLAttributes<HTMLInputElement>
 ) {
   return (
     <input 
@@ -29,6 +24,9 @@ export function FormInput(
 
         ${className}
       `}
+      value={value}
+      onClick={onClick}
+      onChange={onChange}
     />
   )
 }
