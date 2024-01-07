@@ -19,11 +19,20 @@ import {
 import { GrTextAlignFull as LongTextIcon } from "react-icons/gr";
 import { IoIosCheckboxOutline as CheckboxIcon, IoMdClose as CloseIcon } from "react-icons/io";
 import { Switch } from "../ui/switch";
-import {  ChangeEvent, ReactElement,  useMemo,  useState } from "react";
+import {  ChangeEvent, ReactElement,  useEffect,  useMemo,  useState } from "react";
 import { FormInput } from "@/components/form/form-input";
+import { FormDataType, FormFieldType } from "@/lib/form/types";
+import { useDebouncedCallback } from "use-debounce";
 
-export function FormField() {
-  const [fieldType, setFieldType] = useState("SHORT_ANSWER");
+type FormFieldProps = {
+  data: FormFieldType,
+  setFormData: Function,
+  index: number
+}
+
+export function FormField({ data, setFormData, index }: FormFieldProps) {
+  const [formFieldData, setFormFieldData] = useState<FormFieldType>(data);
+  const fieldType = useMemo(() => formFieldData.type, [formFieldData.type]);
 
   const FieldPreview = (): ReactElement => {
     if (fieldType === "SHORT_ANSWER")
@@ -31,24 +40,62 @@ export function FormField() {
     else if (fieldType === "LONG_ANSWER")
       return <TextAnswerPreview text="Long answer text" />
     else if (fieldType === "CHECKBOX" || fieldType === "MCQ")
-      return <ChoicePreview />
+      return (
+        <ChoiceAnswerPreview
+          type={fieldType}
+          options={data.options}
+          setFormData={setFormData}
+          fieldIndex={index}
+        />
+      )
 
     return <TextAnswerPreview text="undefined" />
   }
 
+  const handleQuestionChange = useDebouncedCallback((value: string) => {
+    setFormData((prev: FormDataType) => {
+      const updated = {...prev};
+      updated.fields[index].question = value;
+      return updated;
+    });
+  }, 300);
+
+  const handleTypeChange = useDebouncedCallback((value: string) => {
+    setFormData((prev: FormDataType) => {
+      const updated = {...prev};
+      updated.fields[index].type = value;
+
+      if (value === "SHORT_ANSWER" || value === "LONG_ANSWER")
+        updated.fields[index].options = [];
+
+      return updated
+    });
+  }, 300);
+
+  const deleteFormField = () => {
+    setFormData((prev: FormDataType) => {
+      if (prev.fields.length <= 1) return prev;
+      const updated = { ...prev };
+      updated.fields = [ ...updated.fields.slice(0, index), ...updated.fields.slice(index + 1) ];
+      return updated;
+    });
+  }
+
   return (
-    <Card>
+    <Card className="h-fit">
       <CardHeader className="flex items-center flex-row gap-2">
         <Input 
           name="question"
           placeholder="Question"
-          defaultValue="Untitled Question"
+          defaultValue={ data.question || "Untitled Question" }
+          onChange={(e) => handleQuestionChange(e.target.value)}
+          autoComplete="off"
         />
 
         <Select
           name="field-type"
-          defaultValue="SHORT_ANSWER"
-          onValueChange={(value: string) => setFieldType(value)}
+          defaultValue={ data.type || "SHORT_ANSWER"}
+          onValueChange={(value: string) => handleTypeChange(value)}
         >
           <SelectTrigger className="m-all-0 w-2/5">
             <SelectValue placeholder="Select Question Type" />
@@ -75,9 +122,15 @@ export function FormField() {
       <CardFooter >
         <div className="flex items-center gap-2">
           <p className="text-sm text-zinc-400">Required</p>
-          <Switch />
+          <Switch name="required" defaultChecked={data.required} onCheckedChange={(value) => {
+            setFormData((prev: FormDataType) => {
+              const updated = { ...prev };
+              updated.fields[index].required = value;
+              return updated;
+            })
+          }} />
         </div>
-        <Button variant="ghost" className="p-2 ml-auto">
+        <Button variant="ghost" className="p-2 ml-auto" onClick={deleteFormField}>
           <TrashIcon size="1.2rem" className="block" />
         </Button>
       </CardFooter>
@@ -93,43 +146,60 @@ function TextAnswerPreview({ text }: { text: string }) {
   );
 }
 
-type ChoiceType = {
-  name: string,
-  value: string
+type ChoiceAnswerPreviewProps = {
+  type: string,
+  options?: string[],
+  setFormData: Function,
+  fieldIndex: number
 }
 
-function ChoicePreview() {
-  const [options, setOptions] = useState<ChoiceType[]>([{ name: "option-1", value: "Option 1" }]);
+function ChoiceAnswerPreview({ type, options=[], setFormData, fieldIndex }: ChoiceAnswerPreviewProps) {
+  const Icon = (): ReactElement => {
+    if (type === "CHECKBOX")
+      return <CheckboxIcon className="mt-0.5 fill-zinc-400" />
+    return <RadioButtonUncheckedIcon className="mt-0.5 fill-zinc-400" />
+  }
+
   const optionCount = useMemo(() => options.length, [options]);
 
   const addOption = () => {
     if (optionCount >= 5) return;
-    const option: ChoiceType = { name: `option-${optionCount + 1}`, value: `Option ${optionCount + 1}` };
-    setOptions(prev => [...prev, option]);
+    const option = `Option ${optionCount + 1}`;
+    setFormData((prev: FormDataType) => {
+      const updated = { ...prev };
+      updated.fields[fieldIndex].options?.push(option);
+      return updated;
+    });
   }
 
   const removeOption = (index: number) => {
     if (optionCount <= 1) return;
-    const updatedOptions = [ ...options.slice(0, index), ...options.slice(index + 1) ];
-    setOptions(updatedOptions);
+    setFormData((prev: FormDataType) => {
+      const updated = { ...prev };
+      const options = updated.fields[fieldIndex].options;
+      updated.fields[fieldIndex].options = [ ...options.slice(0, index), ...options.slice(index + 1) ];
+      return updated;
+    });
   }
 
-  const handleInputChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
-    const updatedOptions = options;
-    updatedOptions[index].value = e.target.value;
-    setOptions(updatedOptions);
-  }
+  const handleInputChange = useDebouncedCallback((index: number, value: string) => {
+    setFormData((prev: FormDataType) => {
+      const updated = { ...prev };
+      updated.fields[fieldIndex].options[index] = value;
+      return updated;
+    });
+  }, 300);
  
   return (
     <div className="grid gap-4">
       { options.map((option, index) => (
-        <div className="flex gap-2">
-          <RadioButtonUncheckedIcon className="mt-0.5 fill-zinc-400" />
+        <div key={index} className="flex gap-2">
+          <Icon />
           <FormInput
-            name={option.name}
-            value={option.value}
+            name="option"
+            defaultValue={option}
             className="text-sm pb-1  w-full"
-            onChange={(e) => handleInputChange(index, e)}
+            onChange={(e) => handleInputChange(index, e.target.value)}
           />
           <Button onClick={() => removeOption(index)} variant="ghost" className="h-fit p-px">
             <CloseIcon size="1.2rem" />
@@ -137,7 +207,7 @@ function ChoicePreview() {
         </div>
       )) }
       <div className="flex gap-2">
-        <RadioButtonUncheckedIcon className="mt-0.5 fill-zinc-400" />
+        <Icon />
         <Button onClick={addOption} variant="link" className="p-0 h-fit text-zinc-400">Add Option</Button>
       </div>
     </div>

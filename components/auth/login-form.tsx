@@ -7,7 +7,7 @@ import { signIn } from "next-auth/react";
 import { FormEvent } from "react";
 
 export default function LoginForm() {
-  const login = (e: FormEvent) => {
+  const login = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("email") as string;
