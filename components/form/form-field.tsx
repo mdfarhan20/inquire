@@ -19,7 +19,7 @@ import {
 import { GrTextAlignFull as LongTextIcon } from "react-icons/gr";
 import { IoIosCheckboxOutline as CheckboxIcon, IoMdClose as CloseIcon } from "react-icons/io";
 import { Switch } from "../ui/switch";
-import {  ChangeEvent, ReactElement,  useEffect,  useMemo,  useState } from "react";
+import {  ReactElement,  useMemo,  useState } from "react";
 import { FormInput } from "@/components/form/form-input";
 import { FormDataType, FormFieldType } from "@/lib/form/types";
 import { useDebouncedCallback } from "use-debounce";
@@ -31,18 +31,16 @@ type FormFieldProps = {
 }
 
 export function FormField({ data, setFormData, index }: FormFieldProps) {
-  const [formFieldData, setFormFieldData] = useState<FormFieldType>(data);
-  const fieldType = useMemo(() => formFieldData.type, [formFieldData.type]);
 
   const FieldPreview = (): ReactElement => {
-    if (fieldType === "SHORT_ANSWER")
+    if (data.type === "SHORT_ANSWER")
       return <TextAnswerPreview text="Short answer text" />
-    else if (fieldType === "LONG_ANSWER")
+    else if (data.type === "LONG_ANSWER")
       return <TextAnswerPreview text="Long answer text" />
-    else if (fieldType === "CHECKBOX" || fieldType === "MCQ")
+    else if (data.type === "CHECKBOX" || data.type === "MCQ")
       return (
         <ChoiceAnswerPreview
-          type={fieldType}
+          type={data.type}
           options={data.options}
           setFormData={setFormData}
           fieldIndex={index}

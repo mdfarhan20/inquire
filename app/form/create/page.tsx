@@ -30,7 +30,7 @@ export default function CreateFormPage() {
 
   return (
     <main className="grow grid place-items-center p-4">
-      <div className="max-w-95 w-full md:w-3/4 lg:w-1/2 flex flex-col gap-4 h-full relative">
+      <form className="max-w-95 w-full md:w-3/4 lg:w-1/2 flex flex-col gap-4 h-full relative">
         <TitleCard 
           className="h-fit" 
           title={formData.title}
@@ -61,7 +61,7 @@ export default function CreateFormPage() {
             <AddIcon size="1.6rem" />
           </Button>
         </div>
-      </div>
+      </form>
     </main>
   );
 }
