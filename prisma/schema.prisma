@@ -71,6 +71,8 @@ model FormField {
   id        String          @id @default(cuid())
   question  String
   type      FormFieldType   @default(SHORT_ANSWER)
+  required  Boolean   @default(false)
+  index     Int       @default(0)
   formId    String
   options   FormFieldOption[]
 
@@ -82,7 +84,7 @@ model FormFieldOption {
   text        String
   formFieldId String
 
-  formField FormField @relation(fields: [formFieldId], references: [id], onDelete: Cascade)
+  formField   FormField @relation(fields: [formFieldId], references: [id], onDelete: Cascade)
 }
 
 enum FormFieldType {

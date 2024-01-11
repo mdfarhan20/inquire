@@ -45,7 +45,19 @@ export const authOptions = {
         strategy: "jwt"
     },
     secret: process.env.NEXTAUTH_SECRET,
-    debug: process.env.NODE_ENV === "development"
+    debug: process.env.NODE_ENV === "development",
+    callbacks: {
+        session: async ({ session }) => {
+            const user = await prisma.user.findUnique({
+                where: { email: session.user?.email }
+            });
+
+            return {
+                ...session,
+                userId: user.id
+            };
+        },
+    },
 } satisfies NextAuthOptions;
 
 const handler = NextAuth(authOptions);

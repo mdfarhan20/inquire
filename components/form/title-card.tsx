@@ -1,56 +1,37 @@
-"use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { FormInput } from "@/components/form/form-input";
-import { FormDataType } from "@/lib/form/types";
-import { useDebouncedCallback } from "use-debounce";
+import { 
+  Card, CardHeader,
+  CardContent, CardFooter
+} from "@/components/ui/card";
+import { Divider } from "../ui/divider";
+import { getSession } from "@/lib/get-session";
+import { CiMail as MailIcon } from "react-icons/ci";
+import { HTMLAttributes } from "react";
 
-type TitleCardProps = {
-  className?: string,
-  title?: string,
-  description?: string,
-  formData?: FormDataType,
-  setFormData: Function,
+interface TitleCardProps extends HTMLAttributes<HTMLDivElement> {
+  title: string,
+  description: string | null,
 }
 
-export default function TitleCard({ className, title, description, setFormData }: TitleCardProps) {
-  const handleTitleChange = useDebouncedCallback((value) => {
-    setFormData((prev: FormDataType) => {
-      const updated = {...prev};
-      updated.title = value;
-      return updated;
-    });
-  }, 300);
-
-  const handleDescriptionChange = useDebouncedCallback((value) => {
-    setFormData((prev: FormDataType) => {
-      const updated = {...prev};
-      updated.description = value;
-      return updated;
-    });
-  }, 300);
+export default async function TitleCard({ title, description, ...props }: TitleCardProps) {
+  const session = await getSession();
 
   return (
-    <section className={`${className}`}>
+    <section { ...props }>
       <Card className="border-t-4 border-t-primary">
-        <CardContent className="p-6 grid gap-6">
-          <FormInput 
-            name="title"
-            placeholder="Form Title"
-            defaultValue={title || "Untitled Form"}
-            className="text-3xl"
-            required
-            onChange={(e) => handleTitleChange(e.target.value)}
-          />          
-          <FormInput 
-            name="description"
-            placeholder="Form description"
-            required
-            className="text-sm"
-            defaultValue={ description }
-            onChange={(e) => handleDescriptionChange(e.target.value)}
-          />          
+        <CardHeader>
+          <h1 className="text-3xl">{ title }</h1>
+          <p className="text-sm text-zinc-400">{ description }</p>
+        </CardHeader>
+        <Divider />
+        <CardContent className="px-6 py-4 flex justify-between items-center">
+          <p>{ session?.user?.email }</p>
+          <MailIcon size="1.2rem"/>
         </CardContent>
+        <Divider />
+        <CardFooter className="px-6 py-4">
+          <p className="text-red-400 text-xs">* Indicates required question</p>
+        </CardFooter>
       </Card>
     </section>
   )
