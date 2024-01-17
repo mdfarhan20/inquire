@@ -3,7 +3,7 @@
 import { hash } from "bcrypt";
 import prisma from "@/prisma/client";
 import { redirect } from "next/navigation";
-import { FormDataType, FormFieldType } from "./form/types";
+import { FieldResponseType, FormDataType, FormFieldType } from "./form/types";
 import { getSession } from "./get-session";
 
 export async function createUser(formData: FormData) {
@@ -72,4 +72,44 @@ export async function createFieldOption(optionText: string, fieldId: string) {
   } catch (err) {
     console.log(err);
   }
+}
+
+
+export async function submitFormResponse(formId: string, formResponse: FieldResponseType[]) {
+  const session = await getSession();
+
+  try {
+    await prisma.formSubmission.create({
+      data: {
+        userId: session?.userId,
+        formId
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+  formResponse.forEach(async (response) => {
+    if (response.answer instanceof Array) {
+      response.answer.forEach(async (answer) => {
+        await prisma.formFieldResponse.create({
+          data: {
+            answer,
+            userId: session?.userId,
+            formFieldId: response.formFieldId
+          }
+        });
+      });
+    } else {
+      await prisma.formFieldResponse.create({
+        data: {
+          answer: response.answer,
+          userId: session?.userId,
+          formFieldId: response.formFieldId
+        }
+      })
+    }
+  });
+
+  redirect("/");
 }

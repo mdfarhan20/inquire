@@ -10,6 +10,7 @@ import { createForm } from "@/lib/actions";
 import FormSubmitButton from "@/components/form/form-submit-button";
 
 export default function CreateFormPage() {
+  const [fieldInFocus, setFieldInFocus] = useState(0);
   const [formData, setFormData] = useState<FormDataType>({
     title: "Untitled Form",
     fields: [{ question: "Untitled question", type: "SHORT_ANSWER", options: [], required: false }]
@@ -48,6 +49,8 @@ export default function CreateFormPage() {
               data={field}
               index={index}
               setFormData={setFormData}
+              onFocus={() => setFieldInFocus(index)}
+              fieldInFocus={fieldInFocus === index}
             />
           )) }
         </div>

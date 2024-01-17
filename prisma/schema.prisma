@@ -34,15 +34,17 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  accounts      Account[]
-  forms         Form[]
-  sessions      Session[]
+  id                String    @id @default(cuid())
+  name              String?
+  email             String?   @unique
+  emailVerified     DateTime?
+  image             String?
+  password          String?
+  accounts          Account[]
+  forms             Form[]
+  responses         FormFieldResponse[]
+  sessions          Session[]
+  formSubmissions   FormSubmission[]
 }
 
 model VerificationToken {
@@ -54,23 +56,25 @@ model VerificationToken {
 }
 
 model Form {
-  id          String      @id @default(cuid())
-  title       String
-  description String?
-  userId      String
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  formFields  FormField[]
+  id              String      @id @default(cuid())
+  title           String
+  description     String?
+  userId          String
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  formFields      FormField[]
+  submissions     FormSubmission[]  
 }
 
 model FormField {
-  id       String            @id @default(cuid())
-  question String
-  type     FormFieldType     @default(SHORT_ANSWER)
-  formId   String
-  required Boolean           @default(false)
-  index    Int               @default(0)
-  form     Form              @relation(fields: [formId], references: [id], onDelete: Cascade)
-  options  FormFieldOption[]
+  id        String            @id @default(cuid())
+  question  String
+  type      FormFieldType     @default(SHORT_ANSWER)
+  formId    String
+  required  Boolean           @default(false)
+  index     Int               @default(0)
+  form      Form              @relation(fields: [formId], references: [id], onDelete: Cascade)
+  options   FormFieldOption[]
+  responses FormFieldResponse[]
 }
 
 model FormFieldOption {
@@ -78,6 +82,26 @@ model FormFieldOption {
   text        String
   formFieldId String
   formField   FormField @relation(fields: [formFieldId], references: [id], onDelete: Cascade)
+}
+
+model FormSubmission {
+  userId  String
+  formId  String
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  form    Form    @relation(fields: [formId], references: [id], onDelete: Cascade)
+
+  @@id([userId, formId])
+}
+
+model FormFieldResponse {
+  id            String      @id @default(cuid())
+  answer        String
+  userId        String
+  formFieldId   String
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  formField     FormField   @relation(fields: [formFieldId], references: [id], onDelete: Cascade)
 }
 
 enum FormFieldType {

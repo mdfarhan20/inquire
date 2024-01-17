@@ -19,6 +19,7 @@ export default async function FormPage({ params }: { params: { id: string }}) {
         
         <ResponseForm
           formFields={formFields}
+          formId={formId}
         />
       </div>
     </main>

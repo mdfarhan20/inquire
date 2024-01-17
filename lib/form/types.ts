@@ -13,6 +13,16 @@ export type FormFieldType = {
   required: boolean
 }
 
+export type ResponseWithCount = {
+  _count: number,
+  answer: string,
+}
+
+export interface FieldResponseType<T=string | string[]> {
+  answer: T | null,
+  formFieldId: string
+}
+
 export interface FormFieldWithOptions extends FormField {
   options: FormFieldOption[]
 }

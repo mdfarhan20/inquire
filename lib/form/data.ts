@@ -1,7 +1,7 @@
 
 import prisma from "@/prisma/client";
 import type { Form, FormFieldOption } from "@prisma/client";
-import type { FormFieldWithOptions } from "./types";
+import type { FormFieldWithOptions, ResponseWithCount } from "./types";
 
 export async function fetchFormById(formId: string) {
   const form: Form = await prisma.form.findUnique({
@@ -27,4 +27,20 @@ export async function fetchFormFieldOptions(fieldId: string) {
   });
 
   return options;
+}
+
+export async function fetchResponseByField(fieldId: string) {
+  const responses: ResponseWithCount[] = await prisma.formFieldResponse.groupBy({
+    by: "answer",
+    where: {
+      formFieldId: fieldId
+    },
+    _count: true
+  });
+
+  return responses
+}
+
+export async function fetchResponseByUser() {
+  
 }

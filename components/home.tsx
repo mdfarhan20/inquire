@@ -1,7 +1,5 @@
 "use client";
 
-import LandingSVG from "@/public/landing.svg";
-
 export default function Home() {
     return (
       <div className="text-center grid gap-2 place-items-center">

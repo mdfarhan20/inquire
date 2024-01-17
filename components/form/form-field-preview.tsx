@@ -19,18 +19,20 @@ import {
 import { GrTextAlignFull as LongTextIcon } from "react-icons/gr";
 import { IoIosCheckboxOutline as CheckboxIcon, IoMdClose as CloseIcon } from "react-icons/io";
 import { Switch } from "../ui/switch";
-import {  ReactElement,  useMemo,  useState } from "react";
+import {  HTMLAttributes, ReactElement,  useMemo,  useState } from "react";
 import { FormInput } from "@/components/form/form-input";
 import { FormDataType, FormFieldType } from "@/lib/form/types";
 import { useDebouncedCallback } from "use-debounce";
 
-type FormFieldProps = {
+interface FormFieldProps extends HTMLAttributes<HTMLDivElement> {
   data: FormFieldType,
   setFormData: Function,
-  index: number
+  index: number,
+  fieldInFocus: boolean
 }
 
-export function FormFieldPreview({ data, setFormData, index }: FormFieldProps) {
+export function FormFieldPreview({ data, setFormData, index, fieldInFocus, ...props }: FormFieldProps) {
+  const [inputInFocus, setInputInFocus] = useState(0);
 
   const FieldPreview = (): ReactElement => {
     if (data.type === "SHORT_ANSWER")
@@ -44,6 +46,9 @@ export function FormFieldPreview({ data, setFormData, index }: FormFieldProps) {
           options={data.options}
           setFormData={setFormData}
           fieldIndex={index}
+          focus={inputInFocus}
+          setFocus={setInputInFocus}
+          fieldInFocus={fieldInFocus}
         />
       )
 
@@ -82,7 +87,7 @@ export function FormFieldPreview({ data, setFormData, index }: FormFieldProps) {
   }
 
   return (
-    <Card className="h-fit">
+    <Card className="h-fit" { ...props }>
       <CardHeader className="flex items-center flex-row gap-2">
         <Input 
           name="question"
@@ -146,14 +151,17 @@ function TextAnswerPreview({ text }: { text: string }) {
   );
 }
 
-type ChoiceAnswerPreviewProps = {
+interface ChoiceAnswerPreviewProps {
   type: string,
   options?: string[],
   setFormData: Function,
-  fieldIndex: number
+  fieldIndex: number,
+  focus: number,
+  setFocus: Function,
+  fieldInFocus: boolean
 }
 
-function ChoiceAnswerPreview({ type, options=[], setFormData, fieldIndex }: ChoiceAnswerPreviewProps) {
+function ChoiceAnswerPreview({ type, options=[], setFormData, fieldIndex, focus, setFocus, fieldInFocus }: ChoiceAnswerPreviewProps) {
   const Icon = (): ReactElement => {
     if (type === "CHECKBOX")
       return <CheckboxIcon className="mt-0.5 fill-zinc-400" />
@@ -201,6 +209,9 @@ function ChoiceAnswerPreview({ type, options=[], setFormData, fieldIndex }: Choi
             className="text-sm pb-1  w-full"
             onChange={(e) => handleInputChange(index, e.target.value)}
             placeholder="Option"
+            onFocus={() => setFocus(index)}
+            autoFocus={fieldInFocus && focus === index}
+            onBlur={() => setFocus(null)}
           />
           <Button onClick={() => removeOption(index)} variant="ghost" className="h-fit p-px">
             <CloseIcon size="1.2rem" />
