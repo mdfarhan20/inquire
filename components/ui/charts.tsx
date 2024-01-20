@@ -27,8 +27,8 @@ export function BarChart(props : ChartProps) {
         options={{
           indexAxis: "y",
           responsive: true,
-          elements: {
-            bar: { borderWidth: 1 }
+          scales: {
+            
           }
         }}
       />
