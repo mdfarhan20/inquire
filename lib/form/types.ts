@@ -1,4 +1,4 @@
-import type { FormFieldOption, FormField } from "@prisma/client";
+import type { FormFieldOption, FormField, FormSubmission, User } from "@prisma/client";
 
 export type FormDataType = {
   title: string,
@@ -25,4 +25,8 @@ export interface FieldResponseType<T=string | string[]> {
 
 export interface FormFieldWithOptions extends FormField {
   options: FormFieldOption[]
+}
+
+export interface FormSubmissionWithUser extends FormSubmission {
+  user: User
 }
