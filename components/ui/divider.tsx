@@ -1,7 +1,8 @@
+import { HTMLAttributes } from "react";
 
-export function Divider() {
+export function Divider(props: HTMLAttributes<HTMLHRElement>) {
   return (
-    <hr className="w-full" />
+    <hr { ...props } className={`w-full ${props.className}`} />
   );
 }
 
