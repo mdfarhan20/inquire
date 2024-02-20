@@ -16,7 +16,7 @@ export default function Popup({ title, ...props }: PopopProps) {
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
     >
-      <h2 className="text-lg">Form Created Successfully</h2>
+      <h2 className="text-lg">{title}</h2>
       <Divider className="border-primary" />
       { props.children }
     </motion.div>
