@@ -13,7 +13,6 @@ import { MdContentCopy as CopyIcon } from "react-icons/md";
 import { Divider } from "@/components/ui/divider";
 import clsx from "clsx";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import Popup from "@/components/ui/popup";
 
 export default function CreateFormPage() {

@@ -92,6 +92,11 @@
   *::-webkit-scrollbar-thumb:active {
     background-color: hsl(var(--border));
   }
+
+  input[type=number]::-webkit-inner-spin-button {
+    appearance: none;
+    -webkit-appearance: none;
+  }
 }
 
 .m-all-0 {
