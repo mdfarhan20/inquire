@@ -2,7 +2,7 @@
 
 import FormField from "@/components/form/form-field";
 import type { FormFieldWithOptions, FieldResponseType } from "@/lib/form/types";
-import FormSubmitButton from "./form-submit-button";
+import FormSubmitButton from "@/components/ui/form-submit-button";
 import { useState } from "react";
 import { FormState, submitFormResponse } from "@/lib/form/actions";
 import Popup from "@/components/ui/popup";
