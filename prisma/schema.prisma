@@ -42,6 +42,7 @@ model User {
   password          String?
   accounts          Account[]
   forms             Form[]
+  quizzes           Quiz[]
   responses         FormFieldResponse[]
   sessions          Session[]
   formSubmissions   FormSubmission[]
@@ -56,23 +57,23 @@ model VerificationToken {
 }
 
 model Form {
-  id              String      @id @default(cuid())
+  id              String            @id @default(cuid())
   title           String
   description     String?
   userId          String
-  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   formFields      FormField[]
   submissions     FormSubmission[]  
 }
 
 model FormField {
-  id        String            @id @default(cuid())
+  id        String              @id @default(cuid())
   question  String
-  type      FormFieldType     @default(SHORT_ANSWER)
+  type      FormFieldType       @default(SHORT_ANSWER)
   formId    String
-  required  Boolean           @default(false)
-  index     Int               @default(0)
-  form      Form              @relation(fields: [formId], references: [id], onDelete: Cascade)
+  required  Boolean             @default(false)
+  index     Int                 @default(0)
+  form      Form                @relation(fields: [formId], references: [id], onDelete: Cascade)
   options   FormFieldOption[]
   responses FormFieldResponse[]
 }
@@ -111,3 +112,31 @@ enum FormFieldType {
   LONG_ANSWER
 }
 
+model Quiz {
+  id          String          @id @default(cuid())
+  title       String
+  description String?
+  userId      String
+  questions   QuizQuestion[]
+  
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model QuizQuestion {
+  id        String        @id @default(cuid())
+  question  String 
+  points    Int           @default(0)
+  options   QuizOption[]
+  quizId    String
+
+  quiz      Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model QuizOption {
+  id          String        @id @default(cuid())
+  text        String
+  isCorrect   Boolean       @default(false)
+  questionId  String
+
+  question    QuizQuestion  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}

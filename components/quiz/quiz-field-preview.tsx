@@ -124,12 +124,13 @@ export function QuizFieldPreview({ question, points, options, correctAnswer, ind
       </CardContent>
 
       <CardFooter>
-        <div className="flex items-center border-1 border-border">
+        <div className="flex items-center border-1 border-border rounded-md">
           <Label htmlFor="points" className="font-thin text-xs uppercase p-2 pr-1">Points</Label>
           <input 
             type="number" 
             name="points"
             min={0}
+            max={100}
             defaultValue={points || 0}
             className="text-xs w-10 text-center pr-1 bg-transparent outline-none"
             onChange={(e) => handlePointsChange(e.target.value)}

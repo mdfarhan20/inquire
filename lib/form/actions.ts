@@ -1,7 +1,6 @@
 "use server";
 
 import prisma from "@/prisma/client";
-import { redirect } from "next/navigation";
 import { FieldResponseType, FormDataType, FormFieldType } from "@/lib/form/types";
 import { getSession } from "@/lib/get-session";
 
