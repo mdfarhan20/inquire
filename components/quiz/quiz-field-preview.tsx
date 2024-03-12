@@ -163,7 +163,6 @@ function QuizOption({ id, value, checked, handleInputChange, deleteOption }: Qui
   
   return (
     <div className={className} onClick={() => {
-      console.log("Clicked");
       radioRef.current?.click()
     }}>
       <RadioGroupItem 

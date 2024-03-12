@@ -21,7 +21,7 @@ export async function createForm(formData: FormDataType, state: FormState) {
     }
   });
 
-  formData.fields.forEach( async (field, index) => {
+  formData.fields.forEach(async (field, index) => {
     await createFormField(field, form.id, index)
   });
 

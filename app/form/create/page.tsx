@@ -13,6 +13,7 @@ import { MdContentCopy as CopyIcon } from "react-icons/md";
 import clsx from "clsx";
 import Link from "next/link";
 import Popup from "@/components/ui/popup";
+import CopyText from "@/components/ui/copy-text";
 
 export default function CreateFormPage() {
   const [fieldInFocus, setFieldInFocus] = useState(0);
@@ -79,18 +80,7 @@ export default function CreateFormPage() {
 
       { formState.success && (
         <Popup title="Form Created" className="absolute">
-          <div className="flex bg-zinc-950 rounded-md border-zinc-800 border-1 mx-4">
-            <p className="px-4 py-2 italic text-zinc-400" ref={formURLRef}>{ `${location.origin}/form/${formState.formId}` }</p>
-            <button 
-              className="bg-zinc-800 p-2 overflow-hidden"
-              onClick={() => {
-                navigator.clipboard.writeText(formURLRef?.current?.textContent as string)
-                alert("Form Link Copied!!");
-              }}
-            >
-              <CopyIcon size="1.2rem" />
-            </button>
-          </div>
+          <CopyText text={`${location.origin}/form/${formState.formId}`} />
           <Link href="/"><Button className="mx-4">Back to Dashboard</Button></Link>
         </Popup>
       ) }
