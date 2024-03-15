@@ -1,9 +1,12 @@
 "use client";
 
-import { QuizQuestionWithOptions, QuizResponseType } from "@/lib/quiz/types";
+import { QuizQuestionWithOptions, QuizResponseType, QuizState } from "@/lib/quiz/types";
 import FormSubmitButton from "../ui/form-submit-button";
 import QuizQuestion from "./quiz-question";
 import { useState } from "react";
+import { useFormState } from "react-dom";
+import { submitQuizResponse } from "@/lib/quiz/actions";
+import Popup from "@/components/ui/popup";
 
 interface QuizResponseProps {
   questions: QuizQuestionWithOptions[],
@@ -12,6 +15,8 @@ interface QuizResponseProps {
 
 export default function QuizResponse({ questions, quizId }: QuizResponseProps) {
   const [responseData, setResponseData] = useState<QuizResponseType[]>([]);
+  const submitQuizWithData = submitQuizResponse.bind(null, quizId, responseData);
+  const [formState, formAction] = useFormState<QuizState>(submitQuizWithData, { success: false });
 
   const handleResponseUpdate = (index: number, optionId: string) => {
     const data = [...responseData];
@@ -24,24 +29,32 @@ export default function QuizResponse({ questions, quizId }: QuizResponseProps) {
   }
 
   return (
-    <form>
-      <div className="grow grid gap-4">
-        { questions.map((question, index) => (
-          <QuizQuestion 
-            index={index}
-            question={question}
-            handleResponseUpdate={handleResponseUpdate}
-            selectedOption={responseData[index]?.optionId || null}
-            key={index}
-          />
-        )) }
-      </div>
+    <form action={formAction}>
+      { !formState.success ? (
+        <>
+          <div className="grow grid gap-4">
+            { questions.map((question, index) => (
+              <QuizQuestion 
+                index={index}
+                question={question}
+                handleResponseUpdate={handleResponseUpdate}
+                selectedOption={responseData[index]?.optionId || null}
+                key={index}
+              />
+            )) }
+          </div>
 
-      <FormSubmitButton 
-        text="Submit" 
-        pendingText="Submitting Response" 
-        className="mt-6"
-      />
+          <FormSubmitButton 
+            text="Submit" 
+            pendingText="Submitting Response" 
+            className="mt-6"
+          />
+        </>
+      ) : (
+        <Popup title="Response Submitted" className="mx-auto">
+          <p className="text-sm mx-4">Your response has been recorded.</p>
+        </Popup>
+      ) }
     </form>
   );
 }

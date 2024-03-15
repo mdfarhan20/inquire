@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/prisma/client";
-import { QuizDataType, QuizQuestionType, QuizState } from "@/lib/quiz/types";
+import { QuizDataType, QuizQuestionType, QuizResponseType, QuizState } from "@/lib/quiz/types";
 import { getSession } from "@/lib/get-session";
 import { Quiz, QuizQuestion } from "@prisma/client";
 
@@ -63,5 +63,35 @@ export async function createQuizOption(option: string, questionId: string, isCor
     });
   } catch (err) {
     console.log(err)
+  }
+}
+
+export async function submitQuizResponse(quizId: string, quizResponse: QuizResponseType[], prevState: QuizState) {
+  const session = await getSession();
+
+  try {
+    await prisma.quizSubmission.create({
+      data: {
+        userId: session?.userId,
+        quizId
+      }
+    });
+    
+    quizResponse.forEach(async (repsonse) => {
+      await prisma.quizQuestionResponse.create({
+        data: {
+          userId: session?.userId,
+          questionId: repsonse.questionId,
+          optionId: repsonse.optionId
+        }
+      });
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+  return {
+    success: true,
+    message: "Quiz Submission Recorded"
   }
 }

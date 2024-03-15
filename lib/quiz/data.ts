@@ -1,7 +1,7 @@
 
 import prisma from "@/prisma/client";
-import { Quiz } from "@prisma/client";
-import { QuizQuestionWithOptions } from "@/lib/quiz/types";
+import { Quiz, QuizQuestionResponse } from "@prisma/client";
+import { QuizQuestionWithOptions, QuizSubmissionUser } from "@/lib/quiz/types";
 
 export async function fetchQuizById(id: string) {
   const quiz: Quiz = await prisma.quiz.findUnique({
@@ -18,4 +18,31 @@ export async function fetchQuizQuestions(quizId: string) {
   });
 
   return questions;
+}
+
+export async function fetchQuizSubmitters(quizId: string) {
+  const submissions: QuizSubmissionUser[] = await prisma.quizSubmission.findMany({
+    select: {
+      user: {
+        select: {
+          id: true,
+          email: true,
+        }
+      }
+    },
+    where: { quizId },
+  });
+
+  const users = submissions.map((submission) => submission.user);
+  return users;
+}
+
+export async function fetchUserQuestionResponse(userId: string, questionId: string) {
+  const response: QuizQuestionResponse = await prisma.quizQuestionResponse.findUnique({
+    data: {
+      userId, questionId
+    }
+  });
+
+  return response;
 }

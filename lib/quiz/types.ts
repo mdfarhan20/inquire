@@ -1,4 +1,4 @@
-import { QuizOption, QuizQuestion } from "@prisma/client";
+import { QuizOption, QuizQuestion, QuizSubmission, User } from "@prisma/client";
 
 export type QuizDataType = {
   title: string,
@@ -26,4 +26,8 @@ export type QuizResponseType = {
 
 export interface QuizQuestionWithOptions extends QuizQuestion {
   options: QuizOption[]
+}
+
+export interface QuizSubmissionUser extends QuizSubmission {
+  user: User,
 }

@@ -34,18 +34,21 @@ model Session {
 }
 
 model User {
-  id                String    @id @default(cuid())
-  name              String?
-  email             String?   @unique
-  emailVerified     DateTime?
-  image             String?
-  password          String?
-  accounts          Account[]
-  forms             Form[]
-  quizzes           Quiz[]
-  responses         FormFieldResponse[]
-  sessions          Session[]
-  formSubmissions   FormSubmission[]
+  id                      String    @id @default(cuid())
+  name                    String?
+  email                   String?   @unique
+  emailVerified           DateTime?
+  image                   String?
+  password                String?
+  accounts                Account[]
+  forms                   Form[]
+  quizzes                 Quiz[]
+  responses               FormFieldResponse[]
+  sessions                Session[]
+  formSubmissions         FormSubmission[]
+  quizSubmissions         QuizSubmission[]
+  quizQuestionResponses   QuizQuestionResponse[]
+  polls                   Poll[]
 }
 
 model VerificationToken {
@@ -118,25 +121,69 @@ model Quiz {
   description String?
   userId      String
   questions   QuizQuestion[]
+  submissions QuizSubmission[]
   
   user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model QuizQuestion {
-  id        String        @id @default(cuid())
+  id        String                  @id @default(cuid())
   question  String 
-  points    Int           @default(0)
+  points    Int                     @default(0)
   options   QuizOption[]
   quizId    String
+  responses QuizQuestionResponse[]
 
-  quiz      Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quiz      Quiz                    @relation(fields: [quizId], references: [id], onDelete: Cascade)
 }
 
 model QuizOption {
-  id          String        @id @default(cuid())
+  id          String                    @id @default(cuid())
   text        String
-  isCorrect   Boolean       @default(false)
+  isCorrect   Boolean                   @default(false)
   questionId  String
+  responses   QuizQuestionResponse[]
 
-  question    QuizQuestion  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  question    QuizQuestion              @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+model QuizSubmission {
+  userId  String
+  quizId  String
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz    Quiz    @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@id([userId, quizId])
+}
+
+model QuizQuestionResponse {
+  userId      String
+  questionId  String
+  optionId    String
+
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question    QuizQuestion    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  option      QuizOption      @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  @@id([userId, questionId])
+}
+
+model Poll {
+  id        String      @id @default(cuid())
+  title     String
+  body      String
+  userId    String
+  options   PollOption[]
+  
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PollOption {
+  id      String      @id @default(cuid())
+  text    String
+  votes   Int         @default(0)
+  pollId  String
+
+  poll    Poll        @relation(fields: [pollId], references: [id], onDelete: Cascade)
 }
