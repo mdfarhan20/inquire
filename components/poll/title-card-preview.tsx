@@ -4,27 +4,28 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FormInput } from "@/components/form/form-input";
 import { QuizDataType } from "@/lib/quiz/types";
 import { useDebouncedCallback } from "use-debounce";
+import { PollData } from "@/lib/poll/types";
 
 type TitleCardProps = {
   className?: string,
   title?: string,
-  description?: string,
-  setQuizData: Function,
+  body?: string,
+  setPollData: Function,
 }
 
-export default function TitleCardPreview({ className, title, description, setQuizData }: TitleCardProps) {
+export default function TitleCardPreview({ className, title, body, setPollData }: TitleCardProps) {
   const handleTitleChange = useDebouncedCallback((value: string) => {
-    setQuizData((prev: QuizDataType) => {
+    setPollData((prev: PollData) => {
       const updated = {...prev};
       updated.title = value;
       return updated;
     });
   }, 300);
 
-  const handleDescriptionChange = useDebouncedCallback((value: string) => {
-    setQuizData((prev: QuizDataType) => {
+  const handleBodyChange = useDebouncedCallback((value: string) => {
+    setPollData((prev: PollData) => {
       const updated = {...prev};
-      updated.description = value;
+      updated.body = value;
       return updated;
     });
   }, 300);
@@ -35,7 +36,7 @@ export default function TitleCardPreview({ className, title, description, setQui
         <CardContent className="p-6 grid gap-6">
           <FormInput 
             name="title"
-            placeholder="Quiz Title"
+            placeholder="Poll Title"
             defaultValue={title || "Untitled Quiz"}
             className="text-3xl grow"
             required
@@ -43,10 +44,10 @@ export default function TitleCardPreview({ className, title, description, setQui
           />    
           <FormInput 
             name="description"
-            placeholder="Quiz description"
+            placeholder="Poll body"
             className="text-sm"
-            defaultValue={ description }
-            onChange={(e) => handleDescriptionChange(e.target.value)}
+            defaultValue={ body }
+            onChange={(e) => handleBodyChange(e.target.value)}
           />    
         </CardContent>
       </Card>

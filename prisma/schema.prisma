@@ -172,7 +172,7 @@ model QuizQuestionResponse {
 model Poll {
   id        String      @id @default(cuid())
   title     String
-  body      String
+  body      String?
   userId    String
   options   PollOption[]
   
