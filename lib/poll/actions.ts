@@ -46,12 +46,20 @@ export async function createPollOption(option: string, pollId: string) {
   }
 }
 
-export async function updatePollVotes(optionId: string, prevOptionId: string | null) {
+export async function submitVote(optionId: string | null) {
   try {
-    if (prevOptionId) {
-      await prisma.pollOption.update({
-        where: {}
-      })
-    }
+    if (!optionId)
+      throw new Error("No Option Selected");
+
+    const option = await prisma.pollOption.find({
+      where: { id: optionId }
+    });
+
+    await prisma.pollOption.update({
+      where: { id: optionId },
+      data: { votes: option.votes + 1 }
+    });
+  } catch (err) {
+    console.log(err);
   }
 }
