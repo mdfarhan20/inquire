@@ -76,6 +76,7 @@ const config = {
         "1": "1px"
       },
       maxWidth: {
+        "90": "90vw",
         "95": "95vw"
       }
     },

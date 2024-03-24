@@ -27,14 +27,9 @@ export default async function NavBar() {
             </Button>
           </>
         ) : (
-          <>
-            <Link href="/form/create" className="hover:text-gray-300 duration-100 transition-colors">
-              Create Form
-            </Link>
-            <Link href="/auth/logout" className="hover:text-gray-300 duration-100 transition-colors">
-              Logout
-            </Link>
-          </>
+          <Link href="/auth/logout" className="hover:text-gray-300 duration-100 transition-colors">
+            Logout
+          </Link>
         ) }
 
         <ThemeToggle />
