@@ -15,10 +15,6 @@ export default function PollResponseForm({ options }: PollResponseFormProps) {
   const totalVotes = options.reduce((acc, option) => option.votes + acc, 0);
   const [selection, setSelection] = useState<string | null>(null);
 
-  const getVotePercentage = (votes: number) => {
-    return Math.round((votes / totalVotes) * 100);
-  }
-
   const submitVoteWithId = submitVote.bind(null, selection);
 
   return (
@@ -40,7 +36,6 @@ export default function PollResponseForm({ options }: PollResponseFormProps) {
           </div>
           <div className="px-4 grow relative text-start h-full flex items-center">
             <p>{ option.text }</p>
-            <div className={`absolute bg-orange-500 bg-opacity-25 top-0 left-0 h-full w-[${getVotePercentage(option.votes)}%]`}></div>
           </div>
         </button>
       )) }
