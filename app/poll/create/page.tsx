@@ -12,6 +12,7 @@ import FormSubmitButton from "@/components/ui/form-submit-button";
 import Popup from "@/components/ui/popup";
 import CopyText from "@/components/ui/copy-text";
 import Link from "next/link";
+import { useDebouncedCallback } from "use-debounce";
 
 export default function CreatePollPage() {
   const [pollData, setPollData] = useState<PollData>({
@@ -31,6 +32,12 @@ export default function CreatePollPage() {
     data.options = [...data.options.slice(0, id), ...data.options.slice(id + 1)];
     setPollData(data);
   }
+
+  const handleOptionUpdate = useDebouncedCallback((index: number, value: string) => {
+    const data = { ...pollData };
+    data.options[index] = value;
+    setPollData(data);
+  }, 300);
 
   const createPollWithData = createPoll.bind(null, pollData);
   const [formState, formAction] = useFormState<PollState>(createPollWithData, { success: false });
@@ -55,6 +62,7 @@ export default function CreatePollPage() {
                 type="text"
                 defaultValue={option} 
                 className="border-none bg-transparent outline-none grow text-sm focus:border-b-1 focus:border-primary"
+                onChange={(e) => handleOptionUpdate(index, e.target.value)}
               />
               <Button 
                 variant="ghost"
@@ -84,7 +92,7 @@ export default function CreatePollPage() {
       { formState.success && (
         <Popup title="Poll created successfully" className="absolute">
           <CopyText text={`${location.origin}/quiz/${formState.pollId}`} />
-          <Link href="/"><Button className="mx-4">Back to Dashboard</Button></Link>
+          <Link href="/dashboard"><Button className="mx-4">Back to Dashboard</Button></Link>
         </Popup>
       ) }
     </main>

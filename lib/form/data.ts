@@ -68,3 +68,11 @@ export async function fetchUserFieldResponse(userId: string, fieldId: string) {
 
   return responses;
 }
+
+export async function fetchFormsByUser(userId: string) {
+  const forms: Form[] = await prisma.form.findMany({
+    where: { userId },
+  });
+
+  return forms;
+}

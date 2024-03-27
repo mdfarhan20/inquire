@@ -74,7 +74,7 @@ export default function CreateQuizPage() {
       { formState.success && (
         <Popup title="Quiz created successfully" className="absolute">
           <CopyText text={`${location.origin}/quiz/${formState.quizId}`} />
-          <Link href="/"><Button className="mx-4">Back to Dashboard</Button></Link>
+          <Link href="/dashboard"><Button className="mx-4">Back to Dashboard</Button></Link>
         </Popup>
       ) }
     </main>

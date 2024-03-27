@@ -88,7 +88,7 @@ export function FormFieldPreview({ data, setFormData, index, fieldInFocus, ...pr
 
   return (
     <Card className="h-fit" { ...props }>
-      <CardHeader className="flex items-center flex-row gap-2">
+      <CardHeader className="flex items-center flex-col md:flex-row gap-2">
         <Input 
           name="question"
           placeholder="Question"
@@ -100,9 +100,9 @@ export function FormFieldPreview({ data, setFormData, index, fieldInFocus, ...pr
         <Select
           name="field-type"
           defaultValue={ data.type || "SHORT_ANSWER"}
-          onValueChange={(value: string) => handleTypeChange(value)}
+          onValueChange={(value: string) => handleTypeChange(value)} 
         >
-          <SelectTrigger className="m-all-0 w-2/5">
+          <SelectTrigger className="m-all-0 w-full md:w-2/5">
             <SelectValue placeholder="Select Question Type" />
           </SelectTrigger>
           <SelectContent>

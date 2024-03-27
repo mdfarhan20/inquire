@@ -107,3 +107,13 @@ export async function submitFormResponse(formId: string, formResponse: FieldResp
     message: "Response Submitted"
   }
 }
+
+export async function deleteForm(formId: string) {
+  try {
+    await prisma.form.delete({
+      where: { id: formId }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}

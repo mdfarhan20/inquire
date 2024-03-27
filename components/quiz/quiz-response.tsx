@@ -28,6 +28,25 @@ export default function QuizResponse({ questions, quizId }: QuizResponseProps) {
     setResponseData(data);
   }
 
+  const totalPoints = questions.reduce((acc, question) => acc + question.points, 0);
+  const getScore = () => {  
+    const correctOptions = questions.map((question) => {
+      for (let option of question.options) {
+        if (option.isCorrect)
+          return option.id;
+      }
+      return null;
+    });
+
+    let score = 0;
+    for (let i = 0; i < correctOptions.length; i++) {
+      if (responseData[i].optionId === correctOptions[i])
+        score += questions[i].points;
+    }
+
+    return score;
+  }
+
   return (
     <form action={formAction}>
       { !formState.success ? (
@@ -52,7 +71,7 @@ export default function QuizResponse({ questions, quizId }: QuizResponseProps) {
         </>
       ) : (
         <Popup title="Response Submitted" className="mx-auto">
-          <p className="text-sm mx-4">Your response has been recorded.</p>
+          <p className="text-sm mx-4">You got {getScore()} points out of {totalPoints}.</p>
         </Popup>
       ) }
     </form>

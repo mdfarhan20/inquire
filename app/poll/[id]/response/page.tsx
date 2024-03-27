@@ -31,13 +31,22 @@ export default async function PollResponsePage({ params }: { params: { id: strin
               <div className="bg-border p-4">
                 <OptionIcon />
               </div>
-              <div className="px-4 grow relative text-start h-full flex items-center">
+              <div className="px-4 grow relative text-start h-full flex items-center justify-between">
                 <p>{ option.text }</p>
-                <div className={`absolute bg-neutral-400 top-0 left-0 h-full w-[${getVotePercentage(option.votes)}%]`}></div>
+                <p>{ getVotePercentage(option.votes) }%</p>
+                <div 
+                  style={{width: `${getVotePercentage(option.votes)}%`}}
+                  className={`absolute bg-neutral-400 bg-opacity-10 top-0 left-0 h-full`}
+                ></div>
               </div>
             </li>
           )) }
         </ul>
+
+        <div className="flex items-center place-self-end uppercase text-sm border-border border-1 rounded-md w-fit">
+          <p className="px-3">Votes</p> 
+          <span className="bg-border px-3 py-2">{totalVotes}</span>
+        </div>
       </div>
     </main>
   );

@@ -2,7 +2,7 @@
 
 import prisma from "@/prisma/client";
 import { getSession } from "@/lib/get-session";
-import { PollData, PollState } from "@/lib/poll/types";
+import { PollData } from "@/lib/poll/types";
 import { Poll } from "@prisma/client";
 
 export async function createPoll(pollData: PollData, prevState: PollState) {
@@ -46,18 +46,43 @@ export async function createPollOption(option: string, pollId: string) {
   }
 }
 
-export async function submitVote(optionId: string | null) {
+export type PollState = {
+  success: boolean,
+  message?: string
+}
+
+export async function submitVote(optionId: string | null, prevState: PollState) {
   try {
     if (!optionId)
       throw new Error("No Option Selected");
 
-    const option = await prisma.pollOption.find({
+    const option = await prisma.pollOption.findUnique({
       where: { id: optionId }
     });
+
+    console.log(option);
 
     await prisma.pollOption.update({
       where: { id: optionId },
       data: { votes: option.votes + 1 }
+    });
+
+    return {
+      success: true,
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  return {
+    success: false
+  }
+}
+
+export async function deletePoll(pollId: string) {
+  try {
+    await prisma.poll.delete({
+      where: { id: pollId }
     });
   } catch (err) {
     console.log(err);

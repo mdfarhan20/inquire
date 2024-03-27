@@ -4,22 +4,30 @@ import clsx from "clsx";
 import { PollOption } from "@prisma/client";
 import { useState } from "react";
 import { GrHomeOption as OptionIcon } from "react-icons/gr";
-import { Button } from "@/components/ui/button";
 import { submitVote } from "@/lib/poll/actions";
+import FormSubmitButton from "../ui/form-submit-button";
+import { useFormState } from "react-dom";
+import { redirect } from "next/navigation";
 
 interface PollResponseFormProps {
+  pollId: string,
   options: PollOption[],
 }
 
-export default function PollResponseForm({ options }: PollResponseFormProps) {
+export default function PollResponseForm({ pollId, options }: PollResponseFormProps) {
   const totalVotes = options.reduce((acc, option) => option.votes + acc, 0);
   const [selection, setSelection] = useState<string | null>(null);
 
   const submitVoteWithId = submitVote.bind(null, selection);
+  const [formState, formAction] = useFormState(submitVoteWithId, { success: false });
+
+  if (formState.success) {
+    return redirect(`/poll/${pollId}/response`);
+  }
 
   return (
     <form
-      action={submitVoteWithId}
+      action={formAction}
       className="grid gap-4 px-6 py-4 border-1 border-border border-y-primary rounded-lg"
     >
       { options.map((option, index) => (
@@ -45,7 +53,11 @@ export default function PollResponseForm({ options }: PollResponseFormProps) {
           <p className="px-3">Votes</p> 
           <span className="bg-border px-3 py-2">{totalVotes}</span>
         </div>
-        <Button type="submit" variant="secondary">Vote</Button>
+        <FormSubmitButton
+          text="Vote"
+          pendingText="Voting"
+          variant="secondary"
+        />
       </div>
     </form>
   );

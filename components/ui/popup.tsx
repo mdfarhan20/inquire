@@ -3,10 +3,11 @@ import { Divider } from "@/components/ui/divider";
 import { HTMLAttributes } from "react";
 
 interface PopopProps extends HTMLAttributes<HTMLDivElement> {
-  title: string
+  title: string,
+  center?: boolean
 }
 
-export default function Popup({ title, ...props }: PopopProps) {
+export default function Popup({ title, center, ...props }: PopopProps) {
   return (
     <motion.div
       className={`
@@ -15,6 +16,7 @@ export default function Popup({ title, ...props }: PopopProps) {
       `}
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
+      style={center ? { translateX: "-50%", translateY: "-50%" } : {}}
     >
       <h2 className="text-lg">{title}</h2>
       <Divider className="border-primary" />

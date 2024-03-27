@@ -95,3 +95,13 @@ export async function submitQuizResponse(quizId: string, quizResponse: QuizRespo
     message: "Quiz Submission Recorded"
   }
 }
+
+export async function deleteQuiz(quizId: string) {
+  try {
+    await prisma.quiz.delete({
+      where: { id: quizId }
+    });
+  } catch(err) {
+    console.log(err);
+  }
+}

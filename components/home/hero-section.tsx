@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { FormCard, PollCard, QuizCard } from "./cards";
+import { getSession } from "@/lib/get-session";
 
-export default function Hero() {
+export default async function Hero() {
+  const session = await getSession();
+
   return (
     <section className="h-screen grid place-items-center relative lg:flex lg:flex-col">
       <div className="grid gap-8 place-items-center lg:grid-cols-2 lg:w-4/5 lg:h-3/5">
@@ -13,15 +16,25 @@ export default function Hero() {
         <div className="grid gap-4 place-items-center">
           <p className="lg:px-0 text-center text-sm sm:text-base md:w-1/2 lg:w-4/5 lg:text-lg px-6 font-light lg:tracking-wider">Create, share, and gather insights effortlessly with Inquire. Craft customized forms, quizzes, and polls, then share them via simple links. Start creating today!</p>
           <div className="flex gap-4 justify-center lg:justify-end">
-            <Link href="/login" className="lg:grow">
-              <Button className="w-full">Login</Button>
-            </Link>
-            <Link href="/register" className="lg:grow">
-              <Button className="w-full" variant="secondary">Register</Button>
-            </Link>
+            { session?.user ? (
+              <Link href="/dashboard" className="w-full">
+                <Button className="w-max">Go to Dashboard</Button>
+              </Link>
+            ) : (
+              <>
+                <Link href="/login" className="lg:grow">
+                  <Button className="w-full">Login</Button>
+                </Link>
+                <Link href="/register" className="lg:grow">
+                  <Button className="w-full" variant="secondary">Register</Button>
+                </Link>
+              </>
+            ) }
           </div>
         </div>
       </div>
+
+      
 
       <div className="hidden grid-cols-3 gap-6 px-8 lg:grid w-full">
         <QuizCard />

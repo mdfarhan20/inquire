@@ -99,7 +99,7 @@ export function QuizFieldPreview({ question, points, options, correctAnswer, ind
 
       <CardContent>
         <RadioGroup 
-          className="grid grid-cols-2" 
+          className="grid" 
           onValueChange={(value) => handleCorrectAnswerChange(parseInt(value))}
         >
           { options.map((value, index) => (
@@ -114,7 +114,7 @@ export function QuizFieldPreview({ question, points, options, correctAnswer, ind
           )) }
           <Button 
             variant="outline" 
-            className={clsx("flex gap-1 items-center h-full py-3  ", { "col-span-2": (options.length % 2 === 0) })}
+            className={clsx("flex gap-1 items-center h-full py-3", { "md:col-span-2": (options.length % 2 === 0) })}
             onClick={addNewOption}
           >
             <AddIcon size="1.2rem" />

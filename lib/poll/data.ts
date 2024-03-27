@@ -16,3 +16,11 @@ export async function fetchPollOptions(pollId: string) {
 
   return options;
 }
+
+export async function fetchPollsByUser(userId: string) {
+  const polls: Poll[] = await prisma.poll.findMany({
+    where: { userId },
+  });
+
+  return polls;
+}

@@ -46,3 +46,11 @@ export async function fetchUserQuestionResponse(userId: string, questionId: stri
 
   return response;
 }
+
+export async function fetchQuizzesByUser(userId: string) {
+  const quizzes: Quiz[] = await prisma.quiz.findMany({
+    where: { userId },
+  });
+
+  return quizzes;
+}

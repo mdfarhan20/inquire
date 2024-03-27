@@ -18,6 +18,7 @@ export default async function PollPage({ params }: { params: { id: string } }) {
         />
 
         <PollResponseForm
+          pollId={poll.id}
           options={options}
         />
       </div>

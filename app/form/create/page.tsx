@@ -81,7 +81,7 @@ export default function CreateFormPage() {
       { formState.success && (
         <Popup title="Form Created" className="absolute">
           <CopyText text={`${location.origin}/form/${formState.formId}`} />
-          <Link href="/"><Button className="mx-4">Back to Dashboard</Button></Link>
+          <Link href="/dashboard"><Button className="mx-4">Back to Dashboard</Button></Link>
         </Popup>
       ) }
       
