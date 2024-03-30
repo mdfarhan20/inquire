@@ -9,7 +9,6 @@ import { FormDataType, FormFieldType } from "@/lib/form/types";
 import { FormState, createForm } from "@/lib/form/actions";
 import FormSubmitButton from "@/components/ui/form-submit-button";
 import { useFormState } from "react-dom";
-import { MdContentCopy as CopyIcon } from "react-icons/md";
 import clsx from "clsx";
 import Link from "next/link";
 import Popup from "@/components/ui/popup";
