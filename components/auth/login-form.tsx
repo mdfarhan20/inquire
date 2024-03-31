@@ -15,7 +15,7 @@ export default function LoginForm() {
 
     signIn("credentials", {
       email, password,
-      callbackUrl: window.location.origin
+      callbackUrl: `${window.location.origin}/dashboard`
     })
   }
 

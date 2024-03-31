@@ -22,10 +22,10 @@ export default async function Hero() {
               </Link>
             ) : (
               <>
-                <Link href="/login" className="lg:grow">
+                <Link href="/auth/login" className="lg:grow">
                   <Button className="w-full">Login</Button>
                 </Link>
-                <Link href="/register" className="lg:grow">
+                <Link href="/auth/register" className="lg:grow">
                   <Button className="w-full" variant="secondary">Register</Button>
                 </Link>
               </>
