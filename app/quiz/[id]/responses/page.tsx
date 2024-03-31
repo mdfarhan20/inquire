@@ -1,10 +1,9 @@
 
-import { AppProps } from "next/app"
 import Pagination from "@/components/form/pagination";
 import UserResponseData from "@/components/quiz/user-response-data";
 import { fetchQuizById, fetchQuizQuestions, fetchQuizSubmitters } from "@/lib/quiz/data";
 
-interface QuizResponsesPageProps extends AppProps {
+interface QuizResponsesPageProps {
   params: { id: string },
   searchParams: { 
     submission?: string 

@@ -1,12 +1,17 @@
-import type { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions, Session } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/prisma/client";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
+import { User } from "@prisma/client";
 
-export const authOptions = {
+export interface SessionWithID extends Session {
+    userId: string
+}
+
+export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
             name: "credentials",
@@ -46,14 +51,16 @@ export const authOptions = {
     debug: process.env.NODE_ENV === "development",
     callbacks: {
         session: async ({ session }) => {
-            const user = await prisma.user.findUnique({
+            const user: User = await prisma.user.findUnique({
                 where: { email: session.user?.email }
             });
 
-            return {
+            const sessionWithId: SessionWithID = {
                 ...session,
                 userId: user.id
-            };
+            }
+
+            return sessionWithId;
         },
     },
-} satisfies NextAuthOptions;
+}

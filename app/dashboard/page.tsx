@@ -12,9 +12,9 @@ import { Button } from "@/components/ui/button";
 export default async function DashboardPage() {
   const session = await getSession();
   const [forms, quizzes, polls] = await Promise.all([
-    fetchFormsByUser(session?.userId),
-    fetchQuizzesByUser(session?.userId),
-    fetchPollsByUser(session?.userId)
+    fetchFormsByUser(session?.userId as string),
+    fetchQuizzesByUser(session?.userId as string),
+    fetchPollsByUser(session?.userId as string)
   ]);
 
   return (
