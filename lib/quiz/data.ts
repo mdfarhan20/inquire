@@ -2,6 +2,8 @@
 import prisma from "@/prisma/client";
 import { Quiz, QuizQuestionResponse } from "@prisma/client";
 import { QuizQuestionWithOptions, QuizSubmissionUser } from "@/lib/quiz/types";
+import { unstable_noStore as noStore } from "next/cache";
+
 
 export async function fetchQuizById(id: string) {
   const quiz: Quiz = await prisma.quiz.findUnique({
@@ -48,6 +50,7 @@ export async function fetchUserQuestionResponse(userId: string, questionId: stri
 }
 
 export async function fetchQuizzesByUser(userId: string) {
+  noStore();
   const quizzes: Quiz[] = await prisma.quiz.findMany({
     where: { userId },
   });

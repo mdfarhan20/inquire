@@ -63,4 +63,8 @@ export const authOptions: NextAuthOptions = {
             return sessionWithId;
         },
     },
+    pages: {
+        signIn: "/auth/login",
+        signOut: "/auth/logout"
+    }
 }

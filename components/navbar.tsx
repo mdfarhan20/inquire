@@ -23,7 +23,7 @@ export default async function NavBar() {
               Login
             </Link>
             <Button variant="outline" className="px-4 py-0 border-gray-300">
-              <Link href="/auth/Register">Register</Link>
+              <Link href="/auth/register">Register</Link>
             </Button>
           </>
         ) : (

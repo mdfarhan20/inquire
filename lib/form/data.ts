@@ -2,6 +2,7 @@
 import prisma from "@/prisma/client";
 import type { Form, FormFieldOption, FormFieldResponse, User } from "@prisma/client";
 import type { FormFieldWithOptions, FormSubmissionWithUser, ResponseWithCount } from "./types";
+import { unstable_noStore as noStore } from "next/cache";
 
 export async function fetchFormById(formId: string) {
   const form: Form = await prisma.form.findUnique({
@@ -70,6 +71,8 @@ export async function fetchUserFieldResponse(userId: string, fieldId: string) {
 }
 
 export async function fetchFormsByUser(userId: string) {
+  noStore();
+
   const forms: Form[] = await prisma.form.findMany({
     where: { userId },
   });
