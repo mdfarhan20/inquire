@@ -52,7 +52,7 @@ export default function Collection({ title, type, collection }: CollectionProps)
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem>
-                    <Link href={`/${type}/${item.id}/responses`} className="flex justify-between cursor-pointer w-full">
+                    <Link href={`/${type}/${item.id}/response${type === "poll" ? "" : "s"}`} className="flex justify-between cursor-pointer w-full">
                       <p>Responses</p>
                       <ExternalLink size="1rem" />
                     </Link>
