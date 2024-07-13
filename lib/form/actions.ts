@@ -3,6 +3,7 @@
 import prisma from "@/prisma/client";
 import { FieldResponseType, FormDataType, FormFieldType } from "@/lib/form/types";
 import { getSession } from "@/lib/get-session";
+import { FormFieldType as FormFieldEnum } from "@prisma/client";
 
 export type FormState = {
   success: boolean,
@@ -16,10 +17,10 @@ export async function createForm(formData: FormDataType, state: FormState) {
   const form = await prisma.form.create({
     data: {
       title: formData.title,
-      description: formData.description || null,
-      userId: session?.userId
+      description: formData.description,
+      userId: session?.userId as string
     }
-  });
+  })
 
   formData.fields.forEach(async (field, index) => {
     await createFormField(field, form.id, index)
@@ -37,7 +38,7 @@ export async function createFormField(fieldData: FormFieldType, formId: string, 
     const formField = await prisma.formField.create({
       data: {
         question: fieldData.question,
-        type: fieldData.type,
+        type: fieldData.type as FormFieldEnum,
         required: fieldData.required,
         formId: formId,
         index: index
@@ -72,7 +73,7 @@ export async function submitFormResponse(formId: string, formResponse: FieldResp
   try {
     await prisma.formSubmission.create({
       data: {
-        userId: session?.userId,
+        userId: session?.userId as string,
         formId
       }
     });
@@ -86,7 +87,7 @@ export async function submitFormResponse(formId: string, formResponse: FieldResp
         await prisma.formFieldResponse.create({
           data: {
             answer,
-            userId: session?.userId,
+            userId: session?.userId as string,
             formFieldId: response.formFieldId
           }
         });
@@ -94,8 +95,8 @@ export async function submitFormResponse(formId: string, formResponse: FieldResp
     } else {
       await prisma.formFieldResponse.create({
         data: {
-          answer: response.answer,
-          userId: session?.userId,
+          answer: response.answer as string,
+          userId: session?.userId as string,
           formFieldId: response.formFieldId
         }
       })

@@ -14,7 +14,7 @@ export async function createQuiz(quizData: QuizDataType, state: QuizState) {
       data: {
         title: quizData.title,
         description: quizData.description,
-        userId: session?.userId
+        userId: session?.userId as string
       }
     });
 
@@ -72,7 +72,7 @@ export async function submitQuizResponse(quizId: string, quizResponse: QuizRespo
   try {
     await prisma.quizSubmission.create({
       data: {
-        userId: session?.userId,
+        userId: session?.userId as string,
         quizId
       }
     });
@@ -80,7 +80,7 @@ export async function submitQuizResponse(quizId: string, quizResponse: QuizRespo
     quizResponse.forEach(async (repsonse) => {
       await prisma.quizQuestionResponse.create({
         data: {
-          userId: session?.userId,
+          userId: session?.userId as string,
           questionId: repsonse.questionId,
           optionId: repsonse.optionId
         }
