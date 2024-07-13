@@ -5,7 +5,6 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
-import { User } from "@prisma/client";
 
 export interface SessionWithID extends Session {
     userId: string
@@ -27,7 +26,7 @@ export const authOptions: NextAuthOptions = {
                     email: credentials.email
                 }});
 
-                if (user && await compare(credentials.password, user.password)) {
+                if (user && await compare(credentials.password, user.password as string)) {
                     return user;
                 }
 
@@ -51,20 +50,16 @@ export const authOptions: NextAuthOptions = {
     debug: process.env.NODE_ENV === "development",
     callbacks: {
         session: async ({ session }) => {
-            const user: User = await prisma.user.findUnique({
-                where: { email: session.user?.email }
+            const user = await prisma.user.findUnique({
+                where: { email: session.user?.email as string }
             });
 
             const sessionWithId: SessionWithID = {
                 ...session,
-                userId: user.id
+                userId: user?.id as string
             }
 
             return sessionWithId;
         },
     },
-    pages: {
-        signIn: "/auth/login",
-        signOut: "/auth/logout"
-    }
 }

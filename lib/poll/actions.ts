@@ -13,7 +13,7 @@ export async function createPoll(pollData: PollData, prevState: PollState) {
       data: {
         title: pollData.title,
         body: pollData.body,
-        userId: session?.userId
+        userId: session?.userId as string
       }
     });
 
@@ -64,7 +64,7 @@ export async function submitVote(optionId: string | null, prevState: PollState) 
 
     await prisma.pollOption.update({
       where: { id: optionId },
-      data: { votes: option.votes + 1 }
+      data: { votes: (option?.votes ?? 0) + 1 }
     });
 
     return {

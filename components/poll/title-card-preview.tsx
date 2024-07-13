@@ -2,7 +2,6 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { FormInput } from "@/components/form/form-input";
-import { QuizDataType } from "@/lib/quiz/types";
 import { useDebouncedCallback } from "use-debounce";
 import { PollData } from "@/lib/poll/types";
 
