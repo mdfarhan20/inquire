@@ -7,9 +7,12 @@ import Collection from "@/components/dashboard/collection";
 import { MailIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { unstable_noStore } from "next/cache";
 
 
 export default async function DashboardPage() {
+  unstable_noStore();
+
   const session = await getSession();
   const [forms, quizzes, polls] = await Promise.all([
     fetchFormsByUser(session?.userId as string),
