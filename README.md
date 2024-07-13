@@ -28,3 +28,4 @@ Live Site URL:  [Try the app here](https://inquire-alpha.vercel.app/)
 
 - Github - [mdfarhan20](https://github.com/mdfarhan20)
 - LinkedIn - [Mohamed Farhan](https://www.linkedin.com/in/mohamed-farhan-201103cs/)
+- Portfolio - [Mohamed Farhan](https://mdfarhan20.github.io/portfolio/)
