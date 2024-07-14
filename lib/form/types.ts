@@ -30,3 +30,8 @@ export interface FormFieldWithOptions extends FormField {
 export interface FormSubmissionWithUser extends FormSubmission {
   user: User
 }
+
+export type FormSubmitters = {
+  id: string,
+  email: string | null
+}

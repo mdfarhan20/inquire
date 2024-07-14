@@ -20,7 +20,6 @@ export default function CreateFormPage() {
     title: "Untitled Form",
     fields: [{ question: "Untitled question", type: "SHORT_ANSWER", options: [], required: false }]
   });
-  const formURLRef = useRef<HTMLParagraphElement>(null);
 
   const MAX_FIELDS = 5;
   const addFormField = () => {

@@ -1,14 +1,18 @@
 
 import prisma from "@/prisma/client";
-import { Quiz, QuizQuestionResponse } from "@prisma/client";
-import { QuizQuestionWithOptions, QuizSubmissionUser } from "@/lib/quiz/types";
+import { Quiz } from "@prisma/client";
+import { QuizQuestionWithOptions } from "@/lib/quiz/types";
 import { unstable_noStore as noStore } from "next/cache";
+import { notFound } from "next/navigation";
 
 
 export async function fetchQuizById(id: string) {
-  const quiz: Quiz = await prisma.quiz.findUnique({
+  const quiz = await prisma.quiz.findUnique({
     where: { id }
   });
+
+  if (!quiz)
+    return notFound();
 
   return quiz;
 }
@@ -23,7 +27,7 @@ export async function fetchQuizQuestions(quizId: string) {
 }
 
 export async function fetchQuizSubmitters(quizId: string) {
-  const submissions: QuizSubmissionUser[] = await prisma.quizSubmission.findMany({
+  const submissions = await prisma.quizSubmission.findMany({
     select: {
       user: {
         select: {
@@ -40,8 +44,8 @@ export async function fetchQuizSubmitters(quizId: string) {
 }
 
 export async function fetchUserQuestionResponse(userId: string, questionId: string) {
-  const response: QuizQuestionResponse = await prisma.quizQuestionResponse.findUnique({
-    data: {
+  const response = await prisma.quizQuestionResponse.findFirst({
+    where: {
       userId, questionId
     }
   });

@@ -6,9 +6,10 @@ import { MdOutlineRadioButtonUnchecked as RadioIcon } from "react-icons/md";
 import { IoCheckmark as CorrectIcon } from "react-icons/io5";
 import { IoClose as WrongIcon } from "react-icons/io5";
 import clsx from "clsx";
+import { FormSubmitters } from "@/lib/form/types";
 
 interface UserResponseDataProps {
-  user: User,
+  user: FormSubmitters,
   questions: QuizQuestionWithOptions[]
 }
 
@@ -52,10 +53,10 @@ async function UserQuestionResponse({ question, userId }: UserQuestionResponsePr
         { question.options.map(option => (
           <li className={clsx("flex gap-4 border-1 border-border px-4 py-2 rounded-md items-center", {
             "border-green-600": option.isCorrect,
-            "border-primary": (response.optionId === option.id)
+            "border-primary": (response?.optionId === option.id)
           })}>
             { option.isCorrect 
-              ? <CorrectIcon /> : (response.optionId === option.id && !option.isCorrect) 
+              ? <CorrectIcon /> : (response?.optionId === option.id && !option.isCorrect) 
               ? <WrongIcon /> : <RadioIcon /> 
             }
             <p>{ option.text }</p>

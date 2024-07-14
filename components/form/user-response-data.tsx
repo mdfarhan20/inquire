@@ -1,10 +1,9 @@
 import { fetchUserFieldResponse } from "@/lib/form/data";
-import { FormFieldWithOptions } from "@/lib/form/types"
-import { User } from "@prisma/client"
+import { FormFieldWithOptions, FormSubmitters } from "@/lib/form/types";
 import { CiMail as MailIcon } from "react-icons/ci";
 
 interface UserResponseDataProps {
-  user: User,
+  user: FormSubmitters,
   formFields: FormFieldWithOptions[]
 }
 

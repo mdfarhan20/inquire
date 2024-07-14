@@ -1,7 +1,6 @@
 
 import Pagination from "@/components/form/pagination";
 import UserResponseData from "@/components/form/user-response-data";
-// import FieldResponseData from "@/components/form/field-response-data";
 import { fetchFormFields, fetchFormById, fetchFormSubmitters } from "@/lib/form/data";
 
 interface FormResponsesPageProps {

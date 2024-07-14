@@ -1,12 +1,16 @@
 import prisma from "@/prisma/client";
 import { Poll, PollOption } from "@prisma/client";
 import { unstable_noStore as noStore } from "next/cache";
+import { notFound } from "next/navigation";
 
 
 export async function fetchPollById(id: string) {
-  const poll: Poll = await prisma.poll.findUnique({
+  const poll = await prisma.poll.findUnique({
     where: { id }
   });
+
+  if (!poll)
+    return notFound();
 
   return poll;
 }

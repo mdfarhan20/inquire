@@ -1,28 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Inquire
 
-## Getting Started
+Inquire is a plaform where users can easily create and share forms, quizzes and polls easily with a single link. It is similar to Google Forms. Users can login or sign up easily with a Google or Github account. The creators of the forms or quizzes or polls can view the responses they recieve easily thorugh a reponses page. All your creations can be viewed and managed from a dasbhoard page.
 
-First, run the development server:
+## Table of contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Screenshot](#screenshot)
+- [Built with](#built-with)
+- [Author](#author)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Screenshot
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+![](./screenshot.jpg)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Live Site URL:  [Try the app here](https://inquire-alpha.vercel.app/)
 
 
+## Built with
+
+- Next.js
+- Typescript
+- TailwindCss
+- PostgreSQL
+- Prisma
+- NextAuth 
+
+## Author
 
 - Github - [mdfarhan20](https://github.com/mdfarhan20)
 - LinkedIn - [Mohamed Farhan](https://www.linkedin.com/in/mohamed-farhan-201103cs/)
 - Portfolio - [Mohamed Farhan](https://mdfarhan20.github.io/portfolio/)
-
